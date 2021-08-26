@@ -408,8 +408,13 @@ public:
         switch(op.type) {
             case OpType::read:
                 std::tie(success, std::ignore, std::ignore, std::ignore)
-                        = mt_.select_row(key_type(op.key),
-                                         {{nc::f1, access_t::read}, {nc::f3, access_t::read}, {nc::f5, access_t::read}, {nc::f7, access_t::read}});
+
+                    = mt_.select_row( key_type(op.key),bench::RowAccess::ObserveValue);
+
+
+//                        = mt_.select_row(key_type(op.key),
+                       
+  //                {{nc::f1, access_t::read}, {nc::f3, access_t::read}, {nc::f5, access_t::read}, {nc::f7, access_t::read}});
                 break;
             case OpType::write: {
                 auto v = Sto::tx_alloc<value_type>();
@@ -421,8 +426,12 @@ public:
                 uintptr_t rid;
                 const value_type* value;
                 std::tie(success, std::ignore, rid, value)
-                        = mt_.select_row(key_type(op.key),
-                                         {{nc::f1, access_t::update}, {nc::f3, access_t::update}, {nc::f5, access_t::update}, {nc::f7, access_t::update}});
+                    
+                    = mt_.select_row( key_type(op.key),bench::RowAccess::UpdateValue);
+
+
+ //   = mt_.select_row(key_type(op.key),
+                     //                    {{nc::f1, access_t::update}, {nc::f3, access_t::update}, {nc::f5, access_t::update}, {nc::f7, access_t::update}});
                 if (!success)
                     break;
                 value_type *new_v = Sto::tx_alloc(value);

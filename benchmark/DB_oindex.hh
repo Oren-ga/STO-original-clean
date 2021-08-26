@@ -115,7 +115,7 @@ public:
         return fetch_and_add(&key_gen_, 1);
     }
 
-#if 0
+#if 1
     sel_return_type
     select_row(const key_type& key, RowAccess acc) {
         unlocked_cursor_type lp(table_, key);
@@ -124,9 +124,9 @@ public:
         if (found) {
             return select_row(reinterpret_cast<uintptr_t>(e), acc);
         } else {
-            if (!register_internode_version(lp.node(), lp.full_version_value()))
-                return {false, false, 0, UniRecordAccessor<V>(nullptr)};
-            return {true, false, 0, UniRecordAccessor<V>(nullptr)};
+            if (!register_internode_version(lp.node(), lp))
+                return {false, false, 0, nullptr};
+            return {true, false, 0, nullptr};
         }
     }
 #endif
@@ -147,7 +147,7 @@ public:
         };
     }
 
-#if 0
+#if 1
     sel_return_type
     select_row(uintptr_t rid, RowAccess access) {
         auto e = reinterpret_cast<internal_elem *>(rid);
